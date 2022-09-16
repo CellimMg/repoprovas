@@ -1,5 +1,6 @@
 import { NextFunction, Response, Request } from "express";
 import joi from "joi";
+import { UserInsert } from "../types/User";
 
 export function validateSchema(schema: joi.ObjectSchema){
     return (req: Request, res: Response, next: NextFunction) => {
