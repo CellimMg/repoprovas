@@ -18,3 +18,20 @@ export async function createUser(req: Request, res: Response){
         }
     }
 }
+
+
+export async function signInUser(req: Request, res: Response){
+    try {
+        const userSignIn: UserInsert = req.body;
+        const token: string = await userService.signInUser(userSignIn);
+        return res.status(200).send({token: token});
+    } catch (error) {
+        console.log(error);
+        switch(error){
+            case CustomError.WRONG_CREDENTIALS:
+                return res.status(401).send({message: "E-mail e/ou senha inválidos!"});
+            default:
+                return res.sendStatus(500);
+        }
+    }
+}
