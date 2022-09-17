@@ -1,6 +1,6 @@
 import prisma from "../database/postgres";
-import { CustomError } from "../types/CustomError";
-import { UserInsert } from "../types/User";
+import { alreadyExists, notFound, unexpected, wrongCredentials } from "../types/custom_error";
+import { UserInsert } from "../types/user";
 import {Prisma, User} from "@prisma/client";
 
 
@@ -11,11 +11,11 @@ export async function createUser(user: UserInsert){
         if( error instanceof Prisma.PrismaClientKnownRequestError ){
             switch(error.code){
                 case 'P2002': //Error de inserção de campo @unique
-                    throw CustomError.ALREADY_EXISTS;
+                    throw alreadyExists("Este e-mail já está cadastrado!");
             }
         }
 
-        throw CustomError.UNEXPECTED;
+        throw unexpected();
     }
 }
 
@@ -24,16 +24,21 @@ export async function getUser(user: UserInsert): Promise<User>{
        const userData: User = await prisma.user.findFirstOrThrow({where: {email: user.email}});
         return userData;
     } catch (error) {
-        
-        if( error instanceof Prisma.PrismaClientKnownRequestError ){
-            switch(error.code){
-                case 'P2002': //Error de inserção de campo @unique
-                    throw CustomError.ALREADY_EXISTS;
-            }
-        }
 
-        if(error instanceof Prisma.NotFoundError) throw CustomError.WRONG_CREDENTIALS;
+        if(error instanceof Prisma.NotFoundError) throw wrongCredentials("E-mail e/ou senha inválidos!");
 
-        throw CustomError.UNEXPECTED;
+        throw unexpected();
+    }
+}
+
+export async function getUserById(userId: number): Promise<User>{
+    try {
+       const userData: User = await prisma.user.findFirstOrThrow({where: {id: userId}});
+        return userData;
+    } catch (error) {
+
+        if(error instanceof Prisma.NotFoundError) throw notFound("Este usuário não existe!");
+
+        throw unexpected();
     }
 }

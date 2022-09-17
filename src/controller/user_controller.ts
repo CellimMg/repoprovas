@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { UserInsert, userInsertFromSchema, UserInsertSchema } from "../types/User";
+import { UserInsert, userInsertFromSchema, UserInsertSchema } from "../types/user";
 import * as userService from "../services/user_service";
-import { CustomError } from "../types/CustomError";
+import { codeStringToNumber, isCustomError } from "../types/custom_error";
 
 export async function createUser(req: Request, res: Response){
     try {
@@ -10,12 +10,10 @@ export async function createUser(req: Request, res: Response){
         await userService.createUser(userInsert);
         return res.sendStatus(201);
     } catch (error) {
-        switch(error){
-            case CustomError.ALREADY_EXISTS:
-                return res.status(409).send({message: "Este e-mail já está cadastrado!"});
-            default:
-                return res.sendStatus(500);
-        }
+        if(isCustomError(error!)){
+            return res.status(codeStringToNumber(error.code)).send({message: error.message});
+        } 
+        return res.sendStatus(500);
     }
 }
 
@@ -26,12 +24,9 @@ export async function signInUser(req: Request, res: Response){
         const token: string = await userService.signInUser(userSignIn);
         return res.status(200).send({token: token});
     } catch (error) {
-        console.log(error);
-        switch(error){
-            case CustomError.WRONG_CREDENTIALS:
-                return res.status(401).send({message: "E-mail e/ou senha inválidos!"});
-            default:
-                return res.sendStatus(500);
-        }
+        if(isCustomError(error!)){
+            return res.status(codeStringToNumber(error.code)).send({message: error.message});
+        } 
+        return res.sendStatus(500);
     }
 }

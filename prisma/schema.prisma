@@ -10,11 +10,54 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-
-  id Int @id @default(autoincrement())
-  email String @unique
-  password String 
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
 
   @@map("users")
+}
+
+model Categoria {
+  id   Int    @id @default(autoincrement())
+  nome String @unique
+
+  provas Prova[]
+
+  @@map("categorias")
+}
+
+model Instrutor {
+  id   Int    @id @default(autoincrement())
+  nome String
+
+  provas Prova[]
+
+  @@map("instrutores")
+}
+
+model Disciplina {
+  id   Int    @id @default(autoincrement())
+  nome String
+
+  provas Prova[]
+
+  @@map("disciplinas")
+}
+
+model Prova {
+  id     Int    @id @default(autoincrement())
+  nome   String
+  pdfUrl String
+
+  categoria   Categoria @relation(fields: [categoriaId], references: [id])
+  categoriaId Int
+
+  instrutor   Instrutor @relation(fields: [instrutorId], references: [id])
+  instrutorId Int
+
+  disciplina   Disciplina @relation(fields: [disciplinaId], references: [id])
+  disciplinaId Int
+
+  @@map("provas")
 }

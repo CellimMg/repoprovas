@@ -1,5 +1,5 @@
 import joi from "joi";
-import { UserInsert, UserInsertSchema } from "../types/User";
+import { UserInsert, UserInsertSchema } from "../types/user";
 
 const userInsertSchema = joi.object<UserInsertSchema>({
     email: joi.string().email().required().messages({

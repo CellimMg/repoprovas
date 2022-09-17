@@ -1,6 +1,6 @@
 import { User } from "@prisma/client";
 import joi from "joi";
-import { UserInsert } from "../types/User";
+import { UserInsert } from "../types/user";
 
 
 const userSigninSchema = joi.object<UserInsert>({

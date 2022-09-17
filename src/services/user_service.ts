@@ -1,5 +1,5 @@
-import { CustomError } from "../types/CustomError";
-import { UserInsert } from "../types/User";
+import { wrongCredentials } from "../types/custom_error";
+import { UserInsert } from "../types/user";
 import dotenv from "dotenv";
 dotenv.config();
 import * as userRepository from "../repositories/user_repository";
@@ -14,9 +14,14 @@ export async function createUser(user: UserInsert){
 
 export async function signInUser(user: UserInsert){
     const userData = await userRepository.getUser(user);
-    if(!comparePassword(user.password, userData.password)) throw CustomError.WRONG_CREDENTIALS;
+    if(!comparePassword(user.password, userData.password)) throw wrongCredentials("E-mail e/ou senha inválidos!");
     const token = createToken(userData);
     return token;
+}
+
+export async function getUserById(userId: number){
+    const userdata = await userRepository.getUserById(userId);
+    return userdata;
 }
 
 function createToken(user: User){
