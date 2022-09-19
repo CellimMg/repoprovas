@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { ProvaInsert } from "../types/prova";
-import * as provaService from "../services/prova_service";
+import { TestInsert } from "../types/test";
+import * as testService from "../services/test_service";
 import { codeStringToNumber, isCustomError } from "../types/custom_error";
 
-export async function createProva(req: Request, res: Response){
+export async function createTest(req: Request, res: Response){
     try {
-        const prova: ProvaInsert = req.body;
-        await provaService.createProva(prova);
+        const test: TestInsert = req.body;
+        await testService.createTest(test);
         
         return res.sendStatus(201);
     } catch (error) {
@@ -17,11 +17,21 @@ export async function createProva(req: Request, res: Response){
     }
 }
 
-export async function readProvasByPeriodos(req: Request, res: Response){
+export async function read(req: Request, res: Response){
     try {
-        const provas = await provaService.readProvasByPeriodos();
+        const filterBy = req.headers["filterby"];
+
+        if(filterBy === "teacher"){
+            const data = await testService.getTestsByTeachers();
+            return res.status(200).send({teachers: data});
+
+        }else if(filterBy === "discipline"){
+            const data = await testService.getTestsByDisciplines();
+            return res.status(200).send({terms: data});
+
+        }
         
-        return res.status(200).send({periodos: provas});
+        return res.sendStatus(400); //Erro! não informou header
     } catch (error) {
         console.log(error);
         if(isCustomError(error!)){
@@ -31,9 +41,9 @@ export async function readProvasByPeriodos(req: Request, res: Response){
     }
 }
 
-export async function readProvasByInstructor(req: Request, res: Response){
+/* export async function readProvasByInstructor(req: Request, res: Response){
     try {
-        const provas = await provaService.readProvasByInstructor();
+        const provas = await testService.readProvasByInstructor();
         return res.status(200).send({instructors: provas});
     } catch (error) {
         console.log(error);
@@ -42,4 +52,4 @@ export async function readProvasByInstructor(req: Request, res: Response){
         } 
         return res.sendStatus(500);
     }
-}
+} */

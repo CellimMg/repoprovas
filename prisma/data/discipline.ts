@@ -1,13 +1,12 @@
-import { Disciplina } from "@prisma/client";
+import { Discipline } from "@prisma/client";
 
-const disciplines: Omit<Disciplina, "id">[] = [
-    { nome: "Artes", periodoId: 1 },
-    { nome: "Biologia", periodoId: 2 },
-    { nome: "Geografia", periodoId: 1 },
-    { nome: "Matemática", periodoId: 2 },
-    { nome: "Física", periodoId: 3 },
-    { nome: "História", periodoId: 1 },
-    { nome: "Português", periodoId: 4 },
+const disciplines: Omit<Discipline, "id">[] = [
+    {name: "HTML e CSS", termId: 1},
+    {name: "Javascript", termId: 2},
+    {name: "React", termId: 3},
+    {name: "Humildade", termId: 1},
+    {name: "Planejamento", termId: 2},
+    {name: "Autoconfiança", termId: 3},
 ];
 
 export default disciplines;

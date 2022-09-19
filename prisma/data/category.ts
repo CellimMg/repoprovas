@@ -1,11 +1,9 @@
-import { Categoria } from "@prisma/client";
+import { Category } from "@prisma/client";
 
-const categories: Omit<Categoria, "id">[] = [
-    {nome: "P1"},
-    {nome: "P2"},
-    {nome: "P3"},
-    {nome: "P2ch"},
-    {nome: "Outras"},
+const categories: Omit<Category, "id">[] = [
+    {name: "Projeto"},
+    {name: "Prática"},
+    {name: "Recuperação"},
 ];
 
 export default categories;

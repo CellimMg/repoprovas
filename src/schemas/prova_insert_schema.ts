@@ -1,20 +1,16 @@
 import joi from "joi";
-import { ProvaInsert } from "../types/prova";
+import { TestInsert } from "../types/test";
 
-const provaInsertSchema = joi.object<ProvaInsert>({
-    categoriaId: joi.number().required().messages({
+const provaInsertSchema = joi.object<TestInsert>({
+    categoryId: joi.number().required().messages({
         "number.base": "O id da categoria deve ser um número!",
         "any.required": "Você deve informar o id da categoria!"
     }),
-    disciplinaId: joi.number().required().messages({
+    teacherDisciplineId: joi.number().required().messages({
         "number.base": "O id da disciplina deve ser um número!",
-        "any.required": "Você deve informar o id da disciplina!"
+        "any.required": "Você deve informar o id da disciplina/professor!"
     }),
-    instrutorId: joi.number().required().messages({
-        "number.base": "O id do instrutor deve ser um número!",
-        "any.required": "Você deve informar o id do instrutor!"
-    }),
-    nome: joi.string().required().messages({
+    name: joi.string().required().messages({
         "string.base": "O nome deve ser um texto!",
         "any.required": "Você deve informar o nome da prova!"
     }),

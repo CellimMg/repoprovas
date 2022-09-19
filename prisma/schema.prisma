@@ -18,58 +18,67 @@ model User {
   @@map("users")
 }
 
-model Categoria {
+model Category {
   id   Int    @id @default(autoincrement())
-  nome String @unique
+  name String @unique
 
-  provas Prova[]
+  tests Test[]
 
-  @@map("categorias")
+  @@map("categories")
 }
 
-model Instrutor {
+model Teacher {
   id   Int    @id @default(autoincrement())
-  nome String
+  name String
 
-  provas Prova[]
+  teacherDiscipline TeacherDiscipline[]
 
-  @@map("instrutores")
+  @@map("teachers")
 }
 
-model Periodo{
+model Term {
   id   Int    @id @default(autoincrement())
-  nome String
+  number Int @unique
 
-  disciplinas Disciplina[]
+  disciplines Discipline[]
 
-  @@map("periodos")
+  @@map("terms")
 }
 
-model Disciplina {
+model Discipline {
   id   Int    @id @default(autoincrement())
-  nome String
+  name String
 
-  provas Prova[]
+  teacherDiscipline TeacherDiscipline[]
 
-  periodo Periodo @relation(fields: [periodoId], references: [id])
-  periodoId Int
-  
-  @@map("disciplinas")
+  terms  Term @relation(fields: [termId], references: [id])
+  termId Int
+
+  @@map("disciplines")
 }
 
-model Prova {
+model TeacherDiscipline {
+  id Int @id @default(autoincrement())
+
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+  teacherId Int
+
+  discipline   Discipline @relation(fields: [disciplineId], references: [id])
+  disciplineId Int
+
+  test Test[]
+}
+
+model Test {
   id     Int    @id @default(autoincrement())
-  nome   String
+  name   String
   pdfUrl String
 
-  categoria   Categoria @relation(fields: [categoriaId], references: [id])
-  categoriaId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
 
-  instrutor   Instrutor @relation(fields: [instrutorId], references: [id])
-  instrutorId Int
+  teacherDiscipline   TeacherDiscipline @relation(fields: [teacherDisciplineId], references: [id])
+  teacherDisciplineId Int
 
-  disciplina   Disciplina @relation(fields: [disciplinaId], references: [id])
-  disciplinaId Int
-
-  @@map("provas")
+  @@map("tests")
 }

@@ -1,10 +1,10 @@
-import { Disciplina, Instrutor } from "@prisma/client";
+import { Discipline } from "@prisma/client";
 import prisma from "../database/postgres";
 import { unexpected } from "../types/custom_error";
 
-export async function getDisciplines(){
+export async function readDisciplines(){
     try {
-        const disciplines: Disciplina[] = await prisma.disciplina.findMany();
+        const disciplines: Discipline[] = await prisma.discipline.findMany();
 
         return disciplines;
     } catch (error) {

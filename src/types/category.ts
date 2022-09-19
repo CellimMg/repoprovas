@@ -1,7 +1,11 @@
-import { ProvaAllData } from "./prova";
+import { Category, Test } from "@prisma/client";
 
-export interface CategoryData{
-    id: number,
-    nome: string,
-    provas: ProvaAllData
+export type CategoryWithTests = Partial<Category> & {tests: Test[]};
+
+
+export function toCategoryWithTests(category: Category){
+    return <CategoryWithTests>{
+        ...category,
+        tests: []
+    };
 }
