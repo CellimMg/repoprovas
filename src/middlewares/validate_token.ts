@@ -13,11 +13,12 @@ export async function validateToken(req: Request, res: Response, next: NextFunct
         const userId = (data as JwtPayload)["id"];
         const user: User = await getUserById(userId);
 
-        if(!user) return res.sendStatus(401);
+        if(!user) return res.sendStatus(404);
         res.locals.user = user;
 
         next();
     } catch (error) {
+        console.log(error);
         return res.sendStatus(500);
     }
 }

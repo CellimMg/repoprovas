@@ -6,11 +6,24 @@ import { codeStringToNumber, isCustomError } from "../types/custom_error";
 export async function createProva(req: Request, res: Response){
     try {
         const prova: ProvaInsert = req.body;
-        
         await provaService.createProva(prova);
         
         return res.sendStatus(201);
     } catch (error) {
+        if(isCustomError(error!)){
+            return res.status(codeStringToNumber(error.code)).send({message: error.message});
+        } 
+        return res.sendStatus(500);
+    }
+}
+
+export async function readProvasByPeriodos(req: Request, res: Response){
+    try {
+        const provas = await provaService.readProvas();
+        
+        return res.status(200).send({periodos: provas});
+    } catch (error) {
+        console.log(error);
         if(isCustomError(error!)){
             return res.status(codeStringToNumber(error.code)).send({message: error.message});
         } 

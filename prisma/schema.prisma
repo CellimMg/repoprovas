@@ -36,12 +36,24 @@ model Instrutor {
   @@map("instrutores")
 }
 
+model Periodo{
+  id   Int    @id @default(autoincrement())
+  nome String
+
+  disciplinas Disciplina[]
+
+  @@map("periodos")
+}
+
 model Disciplina {
   id   Int    @id @default(autoincrement())
   nome String
 
   provas Prova[]
 
+  periodo Periodo @relation(fields: [periodoId], references: [id])
+  periodoId Int
+  
   @@map("disciplinas")
 }
 
