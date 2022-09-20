@@ -36,7 +36,7 @@ export async function getTestsByDisciplines(){
         const categoriesWithTest = categories.map(category => toCategoryWithTests(category));
         const _teachersDiscipline = teachersDiscipline.filter(teacherDiscipline => teacherDiscipline.disciplineId === discipline.id)
         const _testOfDiscipline = tests.filter(test => _teachersDiscipline.filter(_teacherDiscipline => _teacherDiscipline.id === test.teacherDisciplineId).length > 0);
-        console.log(_testOfDiscipline);
+    
         for(let category of categoriesWithTest){
             category.tests = _testOfDiscipline.filter(test => test.categoryId === category.id);
         }
