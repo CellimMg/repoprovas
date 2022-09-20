@@ -1,11 +1,11 @@
 import { wrongCredentials } from "../types/custom_error";
-import { UserInsert } from "../types/user";
 import dotenv from "dotenv";
 dotenv.config();
 import * as userRepository from "../repositories/user_repository";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
+import { UserInsert } from "../types/user";
 
 
 export async function createUser(user: UserInsert){

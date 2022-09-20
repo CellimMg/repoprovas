@@ -33,7 +33,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signInUser = exports.createUser = void 0;
-const user_1 = require("../types/user");
+const user_1 = require("src/types/user");
 const userService = __importStar(require("../services/user_service"));
 const custom_error_1 = require("../types/custom_error");
 function createUser(req, res) {
