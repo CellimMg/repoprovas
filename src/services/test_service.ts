@@ -24,31 +24,29 @@ export async function getTestsByDisciplines(){
     
     const termsWithDisciplines = terms.map(term => toTermWithDisciplines(term));
     const disciplinesWithCategories = disciplines.map(discipline => toDisciplineWithCategories(discipline));
-    const categoriesWithTests = categories.map(category => toCategoryWithTests(category));
 
 
     for(let test of tests){
         test.name = test.name + ` (${teachers.find(teacher => teacher.id === (teachersDiscipline.find(teacherDiscipline => teacherDiscipline.id == test.teacherDisciplineId)?.teacherId))?.name})`;
     }
 
-    for(let category of categoriesWithTests){
-        category.tests = tests.filter(test => test.categoryId == category.id);
-    }
+    
 
     for(let discipline of disciplinesWithCategories){
-        //Percorre a lista de teste de cada categoria e seleciona a categoria se o disciplineId contido no
-        //teachersDiscipline correspondente ao teachersDisciplineId do teste for correto
-        discipline.categories = 
-            categoriesWithTests.filter(
-                category => category.tests.filter(
-                    test => teachersDiscipline.filter(
-                        teacherDiscipline => teacherDiscipline.disciplineId === discipline.id).filter(
-                            teacherDiscipline => teacherDiscipline.id == test.teacherDisciplineId).length != 0).length != 0);
+        const categoriesWithTest = categories.map(category => toCategoryWithTests(category));
+        const _teachersDiscipline = teachersDiscipline.filter(teacherDiscipline => teacherDiscipline.disciplineId === discipline.id)
+        const _testOfDiscipline = tests.filter(test => _teachersDiscipline.filter(_teacherDiscipline => _teacherDiscipline.id === test.teacherDisciplineId).length > 0);
+        console.log(_testOfDiscipline);
+        for(let category of categoriesWithTest){
+            category.tests = _testOfDiscipline.filter(test => test.categoryId === category.id);
+        }
+
+        discipline.categories = categoriesWithTest;
     }
 
     for(let term of termsWithDisciplines){
         term.disciplines = disciplinesWithCategories.filter(
-            disciplineWithCategories => disciplineWithCategories.termId === term.id)
+            disciplineWithCategories => disciplineWithCategories.termId === term.id);
     }
 
 
@@ -63,37 +61,38 @@ export async function getTestsByTeachers(){
     const teachersDiscipline = await getTeacherDiscipline();
 
     const teacherWithCategories = teachers.map(teacher => toTeacherWithCategories(teacher));
-    const categoriesWithTests = categories.map(category => toCategoryWithTests(category));
 
     for(let test of tests){
         const disciplineId = teachersDiscipline.find(teacherDiscipline => teacherDiscipline.id == test.teacherDisciplineId)?.disciplineId;
-        console.log(disciplineId);
-        const disciplineName = disciplines.filter(discipline => discipline.id == disciplineId);
-        console.log(disciplineName)
+        const disciplineName = disciplines.find(discipline => discipline.id == disciplineId)?.name;
         test.name = `${test.name} (${disciplineName})`;
     }
 
-    for(let teacher of teacherWithCategories){
-        const _teacherDisciplines = teachersDiscipline.filter(teacherDiscipline => teacherDiscipline.teacherId === teacher.id);
-        const _testsTeacher = tests.filter(
-            test => _teacherDisciplines.filter(
-                teacherDiscipline => teacherDiscipline.id === test.teacherDisciplineId).length != 0);
 
-        const categoriesTeacher = categoriesWithTests.filter(
+    for(let teacher of teacherWithCategories){
+            
+        const _teacherDisciplines = [...teachersDiscipline.filter(teacherDiscipline => teacherDiscipline.teacherId === teacher.id)];
+        const _testsTeacher = [...tests.filter(
+            test => _teacherDisciplines.filter(
+                teacherDiscipline => teacherDiscipline.id === test.teacherDisciplineId).length != 0)];
+
+       
+        const _categoriesWithTests = [...categories];
+        const categoriesTeacher = _categoriesWithTests.filter(
             categoryWithTest => _testsTeacher.filter(
                 _testTeacher => _testTeacher.categoryId === categoryWithTest.id).length != 0);
 
-        for(let category of categoriesTeacher){
-            category.tests = _testsTeacher.filter(_testTeacher => _testTeacher.categoryId === category.id);
+        const categoriesWithTests = categoriesTeacher.map(category => toCategoryWithTests(category));
+        for(let category of categoriesWithTests){
+            category.tests = [..._testsTeacher.filter(_testTeacher => _testTeacher.categoryId === category.id)];
         }
-
-        teacher.categories = categoriesTeacher;
+        
+        teacher.categories = categoriesWithTests;
     }
 
     return teacherWithCategories;
+
 }
-
-
 
 //Periodos -> Disciplinas -> Categorias -> Provas
 
