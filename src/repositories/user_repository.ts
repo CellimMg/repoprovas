@@ -2,7 +2,7 @@ import prisma from "../database/postgres";
 import { alreadyExists, notFound, unexpected, wrongCredentials } from "../types/custom_error";
 
 import {Prisma, User} from "@prisma/client";
-import { UserInsert } from "../types/user";
+import { UserInsert } from "../types/user_type";
 
 
 export async function createUser(user: UserInsert){

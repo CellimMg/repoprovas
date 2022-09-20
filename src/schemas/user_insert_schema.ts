@@ -1,5 +1,5 @@
 import joi from "joi";
-import { UserInsertSchema } from "../types/user";
+import { UserInsertSchema } from "../types/user_type";
 
 
 const userInsertSchema = joi.object<UserInsertSchema>({

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as userService from "../services/user_service";
 import { codeStringToNumber, isCustomError } from "../types/custom_error";
-import { UserInsert, userInsertFromSchema, UserInsertSchema } from "../types/user";
+import { UserInsert, userInsertFromSchema, UserInsertSchema } from "../types/user_type";
 
 export async function createUser(req: Request, res: Response){
     try {

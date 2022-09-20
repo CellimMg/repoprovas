@@ -5,7 +5,7 @@ import * as userRepository from "../repositories/user_repository";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
-import { UserInsert } from "../types/user";
+import { UserInsert } from "../types/user_type";
 
 
 export async function createUser(user: UserInsert){
