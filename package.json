@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "16.17.x",
+    "npm": "8.15.x"
+  },
   "scripts": {
-    "dev": "nodemon src/index.ts",
-    "start": "node dist/index.js",
+    "start": "node dist/src/index.js",
+    "dev": "npx ts-node src/index.ts",
     "build": "tsc && prisma generate && npx prisma migrate deploy && npx prisma db seed",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env jest --no-cache ./tests"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -37,7 +41,10 @@
     "@types/jest": "^29.0.3",
     "@types/joi": "^17.2.3",
     "@types/jsonwebtoken": "^8.5.9",
+    "@types/supertest": "^2.0.12",
+    "cross-env": "^7.0.3",
     "jest": "^29.0.3",
+    "supertest": "^6.2.4",
     "ts-jest": "^29.0.1"
   }
 }
